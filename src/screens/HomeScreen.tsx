@@ -6,7 +6,7 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
-import React, {useLayoutEffect} from 'react';
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {useNavigation} from '@react-navigation/native';
 import {
   AdjustmentsIcon,
@@ -16,15 +16,63 @@ import {
 } from 'react-native-heroicons/outline';
 import Categories from '../components/Categories';
 import FeaturedRow from '../components/FeaturedRow';
+import sanityClient from "../../sanity";
+
+interface Category {
+  name: string;
+  image?: string;
+}
+
+interface Dish {
+  name: string;
+  short_description: string;
+  price: number;
+}
+
+interface Restaurant {
+  name: string;
+  short_description: string;
+  image?: string;
+  lat: number;
+  long: number;
+  address: string;
+  rating: number;
+  type: Category;
+  dishes: Dish[];
+}
+
+interface Featured {
+  name: string;
+  short_description: string;
+  restaurants: Restaurant[];
+}
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const [featuredCategories, setFeaturedCategories] = useState([] as any)
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
+
+  useEffect(() => {
+    sanityClient.fetch(`
+        *[_type == "featured"] {
+      ...,
+      restaurants[]->{
+        ...,
+        dishes[]->,
+        type-> {
+         name
+        }
+      },
+    }`).then((data: any) => {
+      setFeaturedCategories(data);
+    });
+},[]);
+
   return (
     <SafeAreaView className={'bg-white pt-5'}>
       {/* Header */}
@@ -66,24 +114,15 @@ const HomeScreen = () => {
         {/* Categories */}
         <Categories />
         {/* Featured */}
-        <FeaturedRow
-          id={'1'}
-          title={'Featured'}
-          description={'Paid plasmants from oir partners'}
-        />
+        {featuredCategories?.map((category:any)=>(
+          <FeaturedRow
+            key={category._id}
+            id={category._id}
+            title={category.name}
+            description={category.short_description}
+          />
+        ))}
 
-        {/* Tasty Discounts */}
-        <FeaturedRow
-          id={'2'}
-          title={'Tasty Discounts'}
-          description={'Paid plasmants from oir partners'}
-        />
-        {/* Offers near you */}
-        <FeaturedRow
-          id={'3'}
-          title={'Offers near you'}
-          description={'Paid plasmants from oir partners'}
-        />
       </ScrollView>
     </SafeAreaView>
   );
