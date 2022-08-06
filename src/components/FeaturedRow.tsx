@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {ScrollView, Text, View} from 'react-native';
 import {ArrowRightIcon} from 'react-native-heroicons/outline';
 import RestaurantCard from './RestaurantCard';
-import sanityClient from "../../sanity";
-import { createProgram } from "@typescript-eslint/parser";
+import sanityClient from '../../sanity';
+import {createProgram} from '@typescript-eslint/parser';
 
 interface Props {
   id: string;
@@ -13,9 +13,10 @@ interface Props {
 const FeaturedRow = ({id, title, description}: Props) => {
   const [restaurants, setRestaurants] = useState([] as any);
 
-  useEffect(()=>{
-    sanityClient.fetch(
-      `
+  useEffect(() => {
+    sanityClient
+      .fetch(
+        `
             *[_type == "featured" && _id == $id] {
               ...,
               restaurants[]->{
@@ -27,12 +28,13 @@ const FeaturedRow = ({id, title, description}: Props) => {
               },
             }[0]
           `,
-      {id}
-    ).then(data => {
-      console.log(data)
-        setRestaurants(data?.restaurants)
-      })
-  },[])
+        {id},
+      )
+      .then(data => {
+        console.log(data);
+        setRestaurants(data?.restaurants);
+      });
+  }, []);
   return (
     <View>
       <View className={'mt-4 flex-row items-center justify-between px-4'}>
@@ -47,8 +49,7 @@ const FeaturedRow = ({id, title, description}: Props) => {
         }}
         showsHorizontalScrollIndicator={false}
         className={'pt-4'}>
-
-        {restaurants?.map((restaurant:any) => (
+        {restaurants?.map((restaurant: any) => (
           <RestaurantCard
             key={restaurant._id}
             id={restaurant._id}
