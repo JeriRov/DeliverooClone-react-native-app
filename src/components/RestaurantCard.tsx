@@ -43,7 +43,7 @@ const RestaurantCard = ({
         source={{
           uri: url.length > 0 ? url : 'http://tny.im/sZF',
         }}
-        className={'h-36 w-36 rounded-sm'}
+        className={'h-36 w-64 rounded-sm'}
       />
       <View className={'px-3 pb-4'}>
         <Text className={'font-bold text-lg pt-2 '}>{title}</Text>

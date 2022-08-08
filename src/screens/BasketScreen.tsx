@@ -57,7 +57,7 @@ const BasketScreen = () => {
           <Image
             className={'h-7 w-7 bg-gray-300 p-4 rounded-full'}
             source={{
-              uri: 'https://images.unsplash.com/photo-1554080353-a576cf803bda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8cGhvdG98ZW58MHx8MHx8&w=1000&q=80',
+              uri: 'http://surl.li/cqfuf',
             }}
           />
           <Text className={'flex-1'}>Deliver in 50-75 min</Text>
@@ -116,7 +116,9 @@ const BasketScreen = () => {
             </Text>
           </View>
 
-          <TouchableOpacity className={'rounded-lg bg-[#00CCBB] p-4'}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('PreparingOrder')}
+            className={'rounded-lg bg-[#00CCBB] p-4'}>
             <Text className={'text-center text-white text-lg font-bold'}>
               Place Order
             </Text>

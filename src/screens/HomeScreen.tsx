@@ -84,7 +84,7 @@ const HomeScreen = () => {
         <Image
           className={'h-7 w-7 bg-gray-300 p-4 rounded-full'}
           source={{
-            uri: 'https://www.grcdi.nl/gsb/Images/niger%20address%20format%203.png',
+            uri: 'http://surl.li/cqfvh',
           }}
         />
         <View className={'flex-1'}>
@@ -99,8 +99,9 @@ const HomeScreen = () => {
         <UserIcon size={35} color={'#00CCBB'} />
       </View>
       {/* Search */}
-      <View className={'flex-row items-center space-x-2 pb-2 mx-4'}>
-        <View className={'flex-row flex-1 space-x-2 bg-gray-200 p-3'}>
+      <View className={'flex-row items-center space-x-2 pb-2 mx-4 px-1'}>
+        <View
+          className={'flex-row flex-1 space-x-2 bg-gray-200 items-center px-3'}>
           <SearchIcon color={'gray'} size={20} />
           <TextInput
             placeholder={'Restaurants and cuisines'}
