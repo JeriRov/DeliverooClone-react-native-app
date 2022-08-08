@@ -7,7 +7,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   addToBasket,
   removeFromBasket,
-  selectBasketItems,
   selectBasketItemsWithId,
 } from '../features/basketSlice';
 const DishRow = ({id, name, description, price, image}) => {

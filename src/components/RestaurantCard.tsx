@@ -1,5 +1,5 @@
 import React from 'react';
-import {BackHandler, Image, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {StarIcon} from 'react-native-heroicons/solid';
 import {LocationMarkerIcon} from 'react-native-heroicons/outline';
 import {urlFor} from '../../sanity';

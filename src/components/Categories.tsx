@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView} from 'react-native';
 import CategoryCard from './CategoryCard';
 import sanityClient, {urlFor} from '../../sanity';
 

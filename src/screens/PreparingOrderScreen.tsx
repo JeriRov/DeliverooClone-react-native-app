@@ -1,4 +1,4 @@
-import {View, Text, Image, A} from 'react-native';
+import {Image} from 'react-native';
 import React, {useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import * as Animatable from 'react-native-animatable';
