@@ -44,8 +44,8 @@ const DeliveryScreen = () => {
         initialRegion={{
           latitude: restaurant.lat,
           longitude: restaurant.long,
-          latitudeDelta: 2,
-          longitudeDelta: 2,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
         }}
         className={'flex-1 mt-10 z-0'}
         mapType={'standard'}>

@@ -17,7 +17,7 @@ const PreparingOrderScreen = () => {
   return (
     <SafeAreaView className={'bg-[#00CCBB] flex-1 justify-center items-center'}>
       <Image
-        source={require('../assets/orderLoading.png')}
+        source={require('../assets/orderLoadingBackground.png')}
         className={'w-full h-full absolute'}
       />
       <Animatable.Image
