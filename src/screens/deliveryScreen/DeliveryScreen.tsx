@@ -4,11 +4,12 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {XIcon} from 'react-native-heroicons/outline';
 import * as Progress from 'react-native-progress';
-import {selectRestaurant} from '../features/restaurantSlice';
+import {selectRestaurant} from '../../features/restaurantSlice';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {homeScreenProp} from './DeliveryScreen.styles';
 
 const DeliveryScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<homeScreenProp>();
   const restaurant = useSelector(selectRestaurant);
   return (
     <View className={'bg-[#00CCBB] flex-1'}>
@@ -33,7 +34,7 @@ const DeliveryScreen = () => {
               className={'h-20 w-20'}
             />
           </View>
-          <Progress.Bar size={30} color={'#00CCBB'} indeterminate={true} />
+          <Progress.Bar color={'#00CCBB'} indeterminate={true} />
           <Text className={'mt-3 text-gray-500'}>
             Your order at {restaurant.title} is being prepared
           </Text>

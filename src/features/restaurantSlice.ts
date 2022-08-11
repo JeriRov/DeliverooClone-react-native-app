@@ -1,26 +1,31 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {RootState} from '../../store';
 
-export interface CounterState {
+export interface ReastaurantState {
   restaurant: {
     id: string;
-    imgUrl: any;
+    imgUrl?: string;
     title: string;
     rating: number;
     genre: string;
     address: string;
     short_description: string;
-    dishes: any[];
+    lat: number;
+    long: number;
+    dishes: string[];
   };
 }
 
-const initialState: CounterState = {
+const initialState: ReastaurantState = {
   restaurant: {
     id: '',
-    imgUrl: null,
+    imgUrl: '',
     title: '',
     rating: 0,
     genre: '',
     address: '',
+    lat: 0,
+    long: 0,
     short_description: '',
     dishes: [],
   },
@@ -39,6 +44,7 @@ export const restaurantSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {setRestaurant} = restaurantSlice.actions;
 
-export const selectRestaurant = (state: any) => state.restaurant.restaurant;
+export const selectRestaurant = (state: RootState) =>
+  state.restaurant.restaurant;
 
 export default restaurantSlice.reducer;

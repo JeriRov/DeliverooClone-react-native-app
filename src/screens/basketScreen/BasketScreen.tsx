@@ -9,18 +9,20 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
-import {selectRestaurant} from '../features/restaurantSlice';
+import {selectRestaurant} from '../../features/restaurantSlice';
 import {
   removeFromBasket,
   selectBasketItems,
   selectBasketTotal,
-} from '../features/basketSlice';
+} from '../../features/basketSlice';
 import {XCircleIcon} from 'react-native-heroicons/solid';
-import {urlFor} from '../../sanity';
+import {urlFor} from '../../../sanity';
 import Currency from 'react-currency-formatter';
+import {BasketItem, GroupedItems, homeScreenProp} from './basketScreen.types';
+import {defaultImg} from '../../helpers/urlHelper';
 
 const BasketScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<homeScreenProp>();
   const restaurant = useSelector(selectRestaurant);
   const items = useSelector(selectBasketItems);
   const [groupedItemsInBasket, setGroupedItemsInBasket] = useState([]);
@@ -28,10 +30,13 @@ const BasketScreen = () => {
   const basketTotal = useSelector(selectBasketTotal);
 
   useEffect(() => {
-    const groupedItems = items.reduce((results: any, item: any) => {
-      (results[item.id] = results[item.id] || []).push(item);
-      return results;
-    }, {});
+    const groupedItems = items.reduce(
+      (results: GroupedItems, item: Dish): GroupedItems => {
+        (results[item.id] = results[item.id] || []).push(item);
+        return results;
+      },
+      {},
+    );
     setGroupedItemsInBasket(groupedItems);
   }, [items]);
 
@@ -47,6 +52,7 @@ const BasketScreen = () => {
           </View>
           <TouchableOpacity
             onPress={navigation.goBack}
+            //@ts-ignore
             className={'rounded-full bg-gray-100 absolute top-3 right-5'}>
             <XCircleIcon color={'#00CCBB'} height={50} width={50} />
           </TouchableOpacity>
@@ -67,31 +73,45 @@ const BasketScreen = () => {
         </View>
 
         <ScrollView className={'divide-y divide-gray-200'}>
-          {Object.entries(groupedItemsInBasket).map(([key, items]) => (
-            <View
-              key={key}
-              className={'flex-row items-center space-x-3 bg-white py-2 px-5'}>
-              <Text className={'text-[#00CCBB]'}>{items.length} x</Text>
-              <Image
-                source={{
-                  uri: urlFor(items[0]?.image).url(),
-                }}
-                className={'h-12 w-12 rounded-full'}
-              />
-              <Text className={'flex-1'}>{items[0]?.name}</Text>
+          {Object.entries(groupedItemsInBasket).map(
+            ([key, basketItems]: [string, BasketItem[]]) => (
+              <View
+                key={key}
+                className={
+                  'flex-row items-center space-x-3 bg-white py-2 px-5'
+                }>
+                <Text className={'text-[#00CCBB]'}>{basketItems.length} x</Text>
+                <Image
+                  source={{
+                    uri:
+                      typeof basketItems[0]?.image !== 'undefined'
+                        ? urlFor(basketItems[0].image).url()
+                        : defaultImg,
+                  }}
+                  className={'h-12 w-12 rounded-full'}
+                />
+                <Text className={'flex-1'}>{basketItems[0]?.name}</Text>
 
-              <Text className={'text-gray-600'}>
-                <Currency quantity={items[0]?.price} currency={'USD'} />
-              </Text>
-              <TouchableOpacity>
-                <Text
-                  className={'text-[#00CCBB] text-xs'}
-                  onPress={() => dispatch(removeFromBasket({id: key}))}>
-                  Remove
+                <Text className={'text-gray-600'}>
+                  <Currency
+                    quantity={
+                      typeof basketItems[0]?.price !== 'undefined'
+                        ? basketItems[0].price
+                        : 0
+                    }
+                    currency={'USD'}
+                  />
                 </Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+                <TouchableOpacity>
+                  <Text
+                    className={'text-[#00CCBB] text-xs'}
+                    onPress={() => dispatch(removeFromBasket({id: key}))}>
+                    Remove
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ),
+          )}
         </ScrollView>
 
         <View className={'p-5 bg-white mt-5 space-y-4'}>
@@ -118,6 +138,7 @@ const BasketScreen = () => {
 
           <TouchableOpacity
             onPress={() => navigation.navigate('PreparingOrder')}
+            //@ts-ignore
             className={'rounded-lg bg-[#00CCBB] p-4'}>
             <Text className={'text-center text-white text-lg font-bold'}>
               Place Order

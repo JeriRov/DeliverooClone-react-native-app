@@ -14,48 +14,22 @@ import {
   SearchIcon,
   UserIcon,
 } from 'react-native-heroicons/outline';
-import Categories from '../components/Categories';
-import FeaturedRow from '../components/FeaturedRow';
-import sanityClient from '../../sanity';
-
-interface Category {
-  name: string;
-  image?: string;
-}
-
-interface Dish {
-  name: string;
-  short_description: string;
-  price: number;
-}
-
-interface Restaurant {
-  name: string;
-  short_description: string;
-  image?: string;
-  lat: number;
-  long: number;
-  address: string;
-  rating: number;
-  type: Category;
-  dishes: Dish[];
-}
-
-interface Featured {
-  name: string;
-  short_description: string;
-  restaurants: Restaurant[];
-}
+import Categories from '../../components/categories/Categories';
+import FeaturedRow from '../../components/featuredRow/FeaturedRow';
+import sanityClient from '../../../sanity';
+import {Category, Featured} from './homeScreen.types';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const [featuredCategories, setFeaturedCategories] = useState([] as any);
+  const [featuredCategories, setFeaturedCategories] = useState(
+    [] as Featured[],
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
-  }, []);
+  }, [navigation]);
 
   useEffect(() => {
     sanityClient
@@ -67,12 +41,12 @@ const HomeScreen = () => {
         ...,
         dishes[]->,
         type-> {
-         name
+          name
         }
       },
     }`,
       )
-      .then((data: any) => {
+      .then((data: Featured[]) => {
         setFeaturedCategories(data);
       });
   }, []);
@@ -113,13 +87,14 @@ const HomeScreen = () => {
       {/* Body */}
       <ScrollView
         className={'bg-gray-100'}
+        // eslint-disable-next-line react-native/no-inline-styles
         contentContainerStyle={{
           paddingBottom: 100,
         }}>
         {/* Categories */}
         <Categories />
         {/* Featured */}
-        {featuredCategories?.map((category: any) => (
+        {featuredCategories?.map((category: Category) => (
           <FeaturedRow
             key={category._id}
             id={category._id}

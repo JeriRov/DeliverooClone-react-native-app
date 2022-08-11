@@ -1,14 +1,12 @@
 import React from 'react';
 import {Image, Text, TouchableOpacity} from 'react-native';
-
-interface Props {
-  imgUrl: string;
-  title: string;
-}
+import {Props} from './categoryCard.types';
 
 const CategoryCard = ({imgUrl, title}: Props) => {
   return (
-    <TouchableOpacity className={'relative mr-2'}>
+    <TouchableOpacity
+      //@ts-ignore
+      className={'relative mr-2'}>
       <Image
         source={{
           uri: imgUrl,

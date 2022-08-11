@@ -1,25 +1,32 @@
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import React, {useState} from 'react';
 import Currency from 'react-currency-formatter';
-import {urlFor} from '../../sanity';
+import {urlFor} from '../../../sanity';
 import {MinusCircleIcon, PlusCircleIcon} from 'react-native-heroicons/solid';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   addToBasket,
   removeFromBasket,
   selectBasketItemsWithId,
-} from '../features/basketSlice';
-const DishRow = ({id, name, description, price, image}) => {
+} from '../../features/basketSlice';
+import {RootState} from '../../../store';
+import {DishRow} from './dishRow.types';
+
+const DishRow = ({id, name, description, price, image}: DishRow) => {
   const [isPressed, setIsPressed] = useState(false);
   const dispatch = useDispatch();
-  const items = useSelector(state => selectBasketItemsWithId(state, id));
+  const items = useSelector((state: RootState) =>
+    selectBasketItemsWithId(state, id),
+  );
 
   const addItemToBasket = () => {
     dispatch(addToBasket({id, name, description, price, image}));
   };
 
   const removeItemFromBasket = () => {
-    if (!items.length > 0) return;
+    if (!(items.length > 0)) {
+      return;
+    }
     dispatch(removeFromBasket({id}));
   };
 
@@ -27,6 +34,7 @@ const DishRow = ({id, name, description, price, image}) => {
     <>
       <TouchableOpacity
         onPress={() => setIsPressed(!isPressed)}
+        //@ts-ignore
         className={`bg-white border p-4 border-gray-200 ${
           isPressed && 'border-b-0'
         }`}>
@@ -40,6 +48,7 @@ const DishRow = ({id, name, description, price, image}) => {
           </View>
           <View>
             <Image
+              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 borderWidth: 1,
                 borderColor: '#F3F3F4',

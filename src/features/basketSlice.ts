@@ -1,10 +1,17 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {RootState} from '../../store';
 
-export interface CounterState {
-  items: any[];
+interface Dish {
+  id: string;
+  price: number;
+  image?: string;
 }
 
-const initialState: CounterState = {
+export interface BasketState {
+  items: Dish[];
+}
+
+const initialState: BasketState = {
   items: [],
 };
 
@@ -17,7 +24,7 @@ export const basketSlice = createSlice({
     },
     removeFromBasket: (state, action) => {
       const index = state.items.findIndex(
-        (item: any) => item.id === action.payload.id,
+        (item: Dish) => item.id === action.payload.id,
       );
       let newBasket = [...state.items];
       if (index >= 0) {
@@ -28,6 +35,7 @@ export const basketSlice = createSlice({
         );
       }
       state.items = newBasket;
+      console.log(typeof 1);
     },
   },
 });
@@ -35,14 +43,14 @@ export const basketSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {addToBasket, removeFromBasket} = basketSlice.actions;
 
-export const selectBasketItems = (state: any) => state.basket.items;
+export const selectBasketItems = (state: RootState) => state.basket.items;
 
-export const selectBasketItemsWithId = (state: any, id: string) =>
-  state.basket.items.filter((item: any) => item.id == id);
+export const selectBasketItemsWithId = (state: RootState, id: string) =>
+  state.basket.items.filter((item: Dish) => item.id === id);
 
-export const selectBasketTotal = (state: any) =>
+export const selectBasketTotal = (state: RootState) =>
   state.basket.items.reduce(
-    (total: number, item: any) => (total += item.price),
+    (total: number, item: Dish) => (total += item.price),
     0,
   );
 

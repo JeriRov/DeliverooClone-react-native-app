@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, Text, View} from 'react-native';
 import {ArrowRightIcon} from 'react-native-heroicons/outline';
-import RestaurantCard from './RestaurantCard';
-import sanityClient from '../../sanity';
+import RestaurantCard from '../restaurantCard/RestaurantCard';
+import sanityClient from '../../../sanity';
+import {Props, Restaurant} from './featuredRow.types';
 
-interface Props {
-  id: string;
-  title: string;
-  description: string;
-}
 const FeaturedRow = ({id, title, description}: Props) => {
-  const [restaurants, setRestaurants] = useState([] as any);
+  const [restaurants, setRestaurants] = useState([] as Restaurant[]);
 
   useEffect(() => {
     sanityClient
@@ -21,19 +17,18 @@ const FeaturedRow = ({id, title, description}: Props) => {
               restaurants[]->{
                 ...,
                 dishes[]->,
-                 type->{
-                   name
-                 }
+                  type->{
+                    name
+                  }
               },
             }[0]
           `,
         {id},
       )
       .then(data => {
-        console.log(data);
         setRestaurants(data?.restaurants);
       });
-  }, []);
+  }, [id]);
   return (
     <View>
       <View className={'mt-4 flex-row items-center justify-between px-4'}>
@@ -43,12 +38,13 @@ const FeaturedRow = ({id, title, description}: Props) => {
       <Text className={'text-xs text-gray-500 px-4'}>{description}</Text>
       <ScrollView
         horizontal
+        // eslint-disable-next-line react-native/no-inline-styles
         contentContainerStyle={{
           paddingHorizontal: 15,
         }}
         showsHorizontalScrollIndicator={false}
         className={'pt-4'}>
-        {restaurants?.map((restaurant: any) => (
+        {restaurants?.map((restaurant: Restaurant) => (
           <RestaurantCard
             key={restaurant._id}
             id={restaurant._id}

@@ -1,7 +1,12 @@
 import {View, Text, ScrollView, Image, TouchableOpacity} from 'react-native';
 import React, {useEffect, useLayoutEffect} from 'react';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {urlFor} from '../../sanity';
+import {
+  ParamListBase,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
+import {urlFor} from '../../../sanity';
 import {
   ArrowLeftIcon,
   QuestionMarkCircleIcon,
@@ -11,10 +16,15 @@ import {
   LocationMarkerIcon,
   StarIcon,
 } from 'react-native-heroicons/solid';
-import DishRow from '../components/DishRow';
-import BasketIcon from '../components/BasketIcon';
+import DishRow from '../../components/dishRow/DishRow';
+import BasketIcon from '../../components/basketIcon/BasketIcon';
 import {useDispatch} from 'react-redux';
-import {setRestaurant} from '../features/restaurantSlice';
+import {setRestaurant} from '../../features/restaurantSlice';
+import {Dish, Restaurant} from '../restaurantScreen/reastaurant.types';
+
+interface Props extends RouteProp<ParamListBase, string> {
+  params: Restaurant;
+}
 
 const RestaurantScreen = () => {
   const navigation = useNavigation();
@@ -32,13 +42,13 @@ const RestaurantScreen = () => {
       long,
       lat,
     },
-  } = useRoute();
+  }: Props = useRoute();
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
-  }, []);
+  }, [navigation]);
 
   useEffect(() => {
     dispatch(
@@ -55,7 +65,19 @@ const RestaurantScreen = () => {
         lat,
       }),
     );
-  }, []);
+  }, [
+    address,
+    dishes,
+    dispatch,
+    genre,
+    id,
+    imgUrl,
+    lat,
+    long,
+    rating,
+    short_description,
+    title,
+  ]);
 
   return (
     <>
@@ -65,13 +87,14 @@ const RestaurantScreen = () => {
           <Image
             className={'w-full h-56 bg-gray-300 p4'}
             source={{
-              uri: urlFor(imgUrl).url(),
+              uri: urlFor(typeof imgUrl === 'undefined' ? '' : imgUrl).url(),
             }}
           />
           <TouchableOpacity
             onPress={() => {
               navigation.goBack();
             }}
+            // @ts-ignore
             className={'absolute top-10 left-5 p-2 bg-gray-100 rounded-full'}>
             <ArrowLeftIcon size={20} color={'#00CCBB'} />
           </TouchableOpacity>
@@ -98,6 +121,7 @@ const RestaurantScreen = () => {
             </Text>
           </View>
           <TouchableOpacity
+            // @ts-ignore
             className={
               'flex-row items-center space-x-2 p-4 border-y border-gray-300'
             }>
@@ -110,7 +134,7 @@ const RestaurantScreen = () => {
         </View>
         <View className={'pb-36'}>
           <Text className={'px-4 pt-6 mb-3 font-bold text-xl'}>Menu</Text>
-          {dishes.map((dish: any) => (
+          {dishes.map((dish: Dish) => (
             <DishRow
               key={dish._id}
               id={dish._id}

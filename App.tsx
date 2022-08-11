@@ -2,13 +2,13 @@ import React from 'react';
 import {TailwindProvider} from 'tailwindcss-react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import HomeScreen from './src/screens/HomeScreen';
-import RestaurantScreen from './src/screens/RestaurantScreen';
+import HomeScreen from './src/screens/homeScreen/HomeScreen';
+import RestaurantScreen from './src/screens/restaurantScreen/RestaurantScreen';
 import {Provider} from 'react-redux';
 import {store} from './store';
-import BasketScreen from './src/screens/BasketScreen';
-import PreparingOrderScreen from './src/screens/PreparingOrderScreen';
-import DeliveryScreen from './src/screens/DeliveryScreen';
+import BasketScreen from './src/screens/basketScreen/BasketScreen';
+import PreparingOrderScreen from './src/screens/preparingOrederScreen/PreparingOrderScreen';
+import DeliveryScreen from './src/screens/deliveryScreen/DeliveryScreen';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
